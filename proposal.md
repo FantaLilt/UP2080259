@@ -3,32 +3,29 @@
 - Your name: Connor Moore
 - Your project title: X,Y Soundscape
 # Describe the theme or key idea behind your project
-To use the X,Y movements of a mouse to create a soundscape. Similarly to a map, the user will use their mouse to discover POI with corresponding sounds returning. 
+To use the X,Y movements of a mouse with a grid system to create a soundscape of various sounds such as synth waves, drums and guitars. 
+Unlike the piano or guitar, users will experience a basic UI that allows them to create a simple drum beat.  
 # Project research
 Replace this text. Briefly discuss examples of some current or historic related projects (incl ude references in bibliography below). TBC
+The main focus is based on PlOrk and SLOrk, a laptop orchestra. Focusing on Vector synthesis similar to the Yamaha TG33 
 ## Proposed sources
-Replace this text. Note: please use APA referencing as standard. TBC
+Nash, C., & Blackwell, A. F. (2011). Tracking virtuosity and flow in computer music. _ICMC_.
+Trueman, D. (2007). Why a laptop orchestra?. Organised Sound, 12(2), 171-179.
+Smallwood, S., Trueman, D., Cook, P. R., & Wang, G. (2008). Composing for laptop orchestra. Computer Music Journal, 32(1), 9-25.
+Wang, G., Bryan, N. J., Oh, J., & Hamilton, R. (2009, August). Stanford laptop orchestra (slork). In ICMC.
+Trueman, D., Cook, P. R., Smallwood, S., & Wang, G. (2006, November). PLOrk: the Princeton laptop orchestra, year 1. In ICMC.
+Resnick, M., Myers, B., Nakakoji, K., Shneiderman, B., Pausch, R., Selker, T., & Eisenberg, M. (2005). _Design principles for tools to support creative thinking_
 # Project development
-Replace this text. Explain how your project will work from a user's perspective. Imagine someo ne who has never used or heard your software before and is approaching it for the first time.
+The user will see a grid with a moveable pin in the center. When the user moves the pin around the grid, the tempo, pitch, frequency, and synths will alter the beat. This will allow the user to create a unique drum beat. The user will not need experience (virtuosity) with drums so this makes this project accessible to all users. 
 ## What do you anticipate them to hear?
-Your text here
+A mixture of synth-based drums.
 ## How will they interact with your software?
 Mouse
 ## What unique features does your software offer them?
-Your text here
+Showcasing an array of drums within a grid. The user will be able to move the pin around the grid and experience a variety of drum samples mixed with each other.
 # List the input sources you will be using
-For example:
-- Audio file input
-- Real-time input
-- Synthetic sources
-- Other (specify here)
+- Real-time X,Y grid input via a mouse
 # List the output sources you will be using
-For example:
-- Audio file output
 - Real-time audio output
-- Other (e.g the software emits control data)
 # List how you will enable real-time control
-For example:
 - SuperCollider GUI
-- Open Sound Control (OSC) - MIDI
-- Other (please specify)
