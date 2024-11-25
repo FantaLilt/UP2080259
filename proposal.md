@@ -6,8 +6,7 @@
 To use the X,Y movements of a mouse with a grid system to create a soundscape of various sounds such as synth waves, drums and guitars. 
 Unlike the piano or guitar, users will experience a basic UI that allows them to create a simple drum beat.  
 # Project research
-Replace this text. Briefly discuss examples of some current or historic related projects (incl ude references in bibliography below). TBC
-The main focus is based on PlOrk and SLOrk, a laptop orchestra. Focusing on Vector synthesis similar to the Yamaha TG33 
+The main focus is based on PlOrk and SLOrk, a group of composers using laptops, controllers, and speakers to create music. I will also be focusing on Vector synthesis. This is where I can use a variety of envelopes and create different tones depending on which oscillator the user has moved the pin to. If I were to use any hardware, I would be using the Yamaha TG33, otherwise I will be using SuperCollider.  
 ## Proposed sources
 Nash, C., & Blackwell, A. F. (2011). Tracking virtuosity and flow in computer music. _ICMC_.
 Trueman, D. (2007). Why a laptop orchestra?. Organised Sound, 12(2), 171-179.
