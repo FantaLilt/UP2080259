@@ -9,3 +9,5 @@ Normal line
 - Bullet Point
 
 [an important link](https://en.wikipedia.org/wiki/Cat)
+
+![Picture of a cat](Images/Siam_lilacpoint.jpg "Siam_lilacpoint.jpg")
