@@ -17,3 +17,10 @@ Normal line
 1. aaa
 1. 1111
 1. 22222
+
+
+```mermaid
+flowchart TD
+    n1["This is a test"] --> n2["Another Node"]
+    n2 --> n3["Final"]
+    ```
