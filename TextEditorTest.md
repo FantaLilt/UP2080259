@@ -8,4 +8,4 @@ Normal line
 
 - Bullet Point
 
-[an important link] (https://en.wikipedia.org/wiki/Cat)
+[an important link](https://en.wikipedia.org/wiki/Cat)
