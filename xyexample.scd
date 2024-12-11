@@ -1,4 +1,6 @@
-p = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/thunder.wav");
+// EZSlider Example
+
+/*p = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/thunder.wav");
 
 (
 SynthDef(\sampler, { arg rate = 1, vol = 0.5;
@@ -22,14 +24,87 @@ slider2 = EZSlider(w, Rect(0, 50, 300, 20),
 
 w.front;
 w.onClose = {~playing.free};
+)*/
+
+----------------------------------------------------------------------------------------------------
+(
+~fx = Bus.audio;
+
+b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bass.wav");
+c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/cymbals.wav");
+d = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/kick.wav");
+e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
+
+
+
+SynthDef(\multisample, { arg bassvol = 0, rate = 1;
+	var bass = PlayBuf.ar(1, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol;
+
+	Out.ar(0, bass*0.5);
+	Out.ar(~fx, bass*0.5);
+
+}).add;
+
+SynthDef(\delay, {
+	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
+	var sound, delay;
+	sound = In.ar(~fx);
+	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+
+	// sound = sound + (LocalIn.ar(2) * fb.dbamp);
+	// delay = DelayC.ar(sound, 2, VarLag.kr(delaytime, lag));
+	// LocalOut.ar(delay);
+	// delay = sound + (delay * wet);
+
+	Out.ar(0, delay);
+}).add
 )
 
---------------------------------------------------------------------------------------------------------------------
 (
-b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/luude.wav");
-c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/silence.wav");
-d = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/thunder.wav");
-e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bed.wav");
+var w, xy, slider1, spec1, slider2, spec2, slider3, spec3;
+w = Window("I am a window", Rect(800, 500, 800, 400));
+
+~delay = Synth(\delay);
+~playing = Synth(\multisample);
+
+spec1 = ControlSpec(-1, 2, \lin, 0, 1);
+spec2 = ControlSpec(0.2, 1, \lin, 0, 0.5);
+spec3 = ControlSpec(0, 1, \lin, 0, 0);
+
+
+slider1 = EZSlider(w, Rect(400, 20, 300, 20),
+	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1);
+
+slider2 = EZKnob(w, Rect(400, 100, 150, 150),
+	label: "Bass Delay", controlSpec: spec2, action: {~delay.set(\delaytime, slider2.value)}, initVal: 0.2);
+
+slider3 = EZKnob(w, Rect(600, 100, 150, 150),
+	label: "FX send", controlSpec: spec3, action: {~delay.set(\wet, slider3.value)}, initVal: 0);
+
+
+
+xy = Slider2D(w, Rect(10, 10, 380, 380));
+xy.setXY(0.5, 0.5);
+
+xy.action={~playing.set(
+	// \kickvol, xy.x,
+	// \cymbalsvol, xy.x.linlin(0, 1, 1, 0),
+	\bassvol, xy.y,
+	// \snarevol, xy.y.linlin(0, 1, 1, 0),
+
+
+)};
+
+w.front;
+w.onClose = {~playing.free};
+)
+-------------------------------------------------------------------------------------------
+// Sample rates would not work with others, add delays
+/*(
+b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bass.wav");
+c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/cymbals.wav");
+d = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/kick.wav");
+e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
 
 SynthDef(\multisample, { arg luudevol = 0, silencevol = 0, thundervol = 0, bedvol = 0, rate = 1, srate = 1, drate = 1, frate = 1;
 	var luude = PlayBuf.ar(2, b.bufnum, BufRateScale.kr(b.bufnum)*frate, loop: 1)*luudevol;
@@ -92,8 +167,9 @@ xy.action={~playing.set(
 
 w.front;
 w.onClose = {~playing.free};
-)
+)*/
 ----------------------------------------------------------------------------------------------------------------------
+//Slider testing for volume (slider 5 and 6)
 /*
 (
 b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/luude.wav");
@@ -197,36 +273,8 @@ w.front;
 w.onClose = {~playing.free};
 )*/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---------------------------------------------------------------------------------------
+// back up if code messes up
 /*(
 b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/luude.wav");
 c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/guitar.wav");
