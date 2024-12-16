@@ -37,7 +37,7 @@ e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
 
 
 
-SynthDef(\basssample, { arg bassvol = 0, rate = 1, fx = 0;
+SynthDef(\basssample, { arg bassvol = 1, rate = 1, fx = 0;
 	var bass = PlayBuf.ar(1, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol;
 
 	Out.ar(0, bass*0.5);
@@ -45,7 +45,7 @@ SynthDef(\basssample, { arg bassvol = 0, rate = 1, fx = 0;
 
 }).add;
 
-SynthDef(\cymbalssample, { arg cymbalsvol = 0, rate = 1, fx = 0;
+SynthDef(\cymbalssample, { arg cymbalsvol = 1, rate = 1, fx = 0;
 	var cymbals = PlayBuf.ar(1, c.bufnum, BufRateScale.kr(c.bufnum)*rate, loop: 1)*cymbalsvol;
 
 	Out.ar(0, cymbals*0.5);
@@ -68,8 +68,8 @@ var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, spec4;
 w = Window("I am a window", Rect(800, 500, 800, 400));
 
 ~delay = Synth(\delay);
-~playing = Synth(\basssample);
 ~playing = Synth(\cymbalssample);
+~playing = Synth(\basssample); // Both synths do not play through gui at same time, which ever is last will be attached to gui. Problem here????????
 
 spec1 = ControlSpec(-1, 2, \lin, 0, 1);
 spec2 = ControlSpec(0.2, 1, \lin, 0, 0.5);
@@ -103,11 +103,12 @@ xy.action={~playing.set(
 )};
 
 w.front;
-w.onClose = {~playing.free};
+w.onClose = {~playing.free}; // does not stop 2nd synth from playing
 )
 ------------------------------------------------------------------------------------------------------
 // adding delays to gui
-/*(
+/
+(
 ~fx = Bus.audio;
 
 b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bass.wav");
@@ -172,7 +173,7 @@ xy.action={~playing.set(
 
 w.front;
 w.onClose = {~playing.free};
-)*/
+)
 -------------------------------------------------------------------------------------------
 // Sample rates would not work with others, add delays
 /*(
