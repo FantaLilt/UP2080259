@@ -1,33 +1,4 @@
 Previous code
-// EZSlider Example
-
-/*p = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/thunder.wav");
-
-(
-SynthDef(\sampler, { arg rate = 1, vol = 0.5;
-	Out.ar(0, PlayBuf.ar(2, p.bufnum, BufRateScale.kr(p.bufnum)*rate, loop: 1)*vol)
-}).add
-)
-
-(
-var w, slider1, spec1, slider2, spec2;
-w = Window("I am a window", Rect(200, 200, 350, 140));
-
-~playing = Synth(\sampler);
-
-spec1 = ControlSpec(-1, 2, \lin, 0, 1);
-spec2 = ControlSpec(0, 1, \lin, 0, 0.5);
-
-slider1 = EZSlider(w, Rect(0, 20, 300, 20),
-	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1);
-slider2 = EZSlider(w, Rect(0, 50, 300, 20),
-	label: "Volume", controlSpec: spec2, action: {~playing.set(\vol, slider2.value)}, initVal: 0.5);
-
-w.front;
-w.onClose = {~playing.free};
-)*/
-
-
 // Sample rates would not work with others, add delays
 /*(
 b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bass.wav");
@@ -235,6 +206,34 @@ xy.action={~playing.set(
 	//\luudevol, xy.y,
 	//\bedvol, xy.y.linlin(0, 1, 1, 0),
 )};
+
+w.front;
+w.onClose = {~playing.free};
+)*/
+
+// EZSlider Example
+
+/*p = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/thunder.wav");
+
+(
+SynthDef(\sampler, { arg rate = 1, vol = 0.5;
+	Out.ar(0, PlayBuf.ar(2, p.bufnum, BufRateScale.kr(p.bufnum)*rate, loop: 1)*vol)
+}).add
+)
+
+(
+var w, slider1, spec1, slider2, spec2;
+w = Window("I am a window", Rect(200, 200, 350, 140));
+
+~playing = Synth(\sampler);
+
+spec1 = ControlSpec(-1, 2, \lin, 0, 1);
+spec2 = ControlSpec(0, 1, \lin, 0, 0.5);
+
+slider1 = EZSlider(w, Rect(0, 20, 300, 20),
+	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1);
+slider2 = EZSlider(w, Rect(0, 50, 300, 20),
+	label: "Volume", controlSpec: spec2, action: {~playing.set(\vol, slider2.value)}, initVal: 0.5);
 
 w.front;
 w.onClose = {~playing.free};
