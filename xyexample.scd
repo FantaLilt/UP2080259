@@ -14,6 +14,7 @@ e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
 SynthDef(\multisample, { arg bassvol = 1, cymbalsvol = 1, kickvol = 1, snarevol = 1, rate = 1;
 	var bass = PlayBuf.ar(1, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;
 	var cymbals = PlayBuf.ar(1, c.bufnum, BufRateScale.kr(c.bufnum)*rate, loop: 1)*cymbalsvol !2;
+	var kick = PlayBuf.ar(1, d.bufnum, BufRateScale.kr(d.bufnum)*rate, loop: 1)*kickvol !2;
 	var snare = PlayBuf.ar(1, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol !2;
 	//bass output
 	Out.ar(0, bass*0.5);
@@ -21,6 +22,9 @@ SynthDef(\multisample, { arg bassvol = 1, cymbalsvol = 1, kickvol = 1, snarevol 
 	//cymbals output
 	Out.ar(0, cymbals*0.5);
 	Out.ar(~cfx, cymbals*0.5);
+	//kick output
+	Out.ar(0, kick*0.5);
+	Out.ar(~kfx, kick*0.5);
 	//snare output
 	Out.ar(0, snare*0.5);
 	Out.ar(~sfx, snare*0.5);
@@ -45,6 +49,15 @@ SynthDef(\cdelay, {
 	Out.ar(0, delay);
 }).add;
 
+SynthDef(\kdelay, {
+	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
+	var sound, delay;
+	sound = In.ar(~kfx);
+	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+
+	Out.ar(0, delay);
+}).add;
+
 SynthDef(\sdelay, {
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
@@ -56,10 +69,11 @@ SynthDef(\sdelay, {
 )
 
 (
-var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5, slider6, slider7;
-w = Window("I am a window", Rect(800, 500, 800, 400));
+var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5, slider6, slider7, slider8, slider9;
+w = Window("I am a window", Rect(800, 100, 800, 800));
 
 ~sdelay = Synth(\sdelay);
+~kdelay = Synth(\kdelay);
 ~cdelay = Synth(\cdelay);
 ~delay = Synth(\delay);
 ~playing = Synth(\multisample);
@@ -89,6 +103,12 @@ slider6 = EZKnob(w, Rect(400, 300, 100, 100),
 
 slider7 = EZKnob(w, Rect(600, 300, 100, 100),
 	label: "Cymbals Delay Wet", controlSpec: spec3, action: {~cdelay.set(\wet, slider7.value)}, initVal: 0);
+
+slider8 = EZKnob(w, Rect(400, 400, 100, 100),
+	label: "Cymbals Delay", controlSpec: spec2, action: {~kdelay.set(\delaytime, slider8.value)}, initVal: 0.2);
+
+slider9 = EZKnob(w, Rect(600, 400, 100, 100),
+	label: "Cymbals Delay Wet", controlSpec: spec3, action: {~kdelay.set(\wet, slider9.value)}, initVal: 0);
 
 
 
