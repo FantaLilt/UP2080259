@@ -136,5 +136,3 @@ xy.action={~playing.set(
 w.front;
 w.onClose = {~playing.free};
 )
-
-
