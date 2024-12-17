@@ -40,9 +40,10 @@ SynthDef(\sdelay, {
 )
 
 (
-var w, xy, slider1, spec1, slider2, spec2, slider3, spec3;
+var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5;
 w = Window("I am a window", Rect(800, 500, 800, 400));
 
+~sdelay = Synth(\sdelay);
 ~delay = Synth(\delay);
 ~playing = Synth(\multisample);
 
@@ -54,11 +55,17 @@ spec3 = ControlSpec(0, 1, \lin, 0, 0);
 slider1 = EZSlider(w, Rect(400, 20, 300, 20),
 	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1);
 
-slider2 = EZKnob(w, Rect(400, 100, 150, 150),
+slider2 = EZKnob(w, Rect(400, 100, 100, 100),
 	label: "Bass Delay", controlSpec: spec2, action: {~delay.set(\delaytime, slider2.value)}, initVal: 0.2);
 
-slider3 = EZKnob(w, Rect(600, 100, 150, 150),
+slider3 = EZKnob(w, Rect(600, 100, 100, 100),
 	label: "Bass Delay Wet", controlSpec: spec3, action: {~delay.set(\wet, slider3.value)}, initVal: 0);
+
+slider4 = EZKnob(w, Rect(400, 200, 100, 100),
+	label: "Snare Delay", controlSpec: spec2, action: {~sdelay.set(\delaytime, slider4.value)}, initVal: 0.2);
+
+slider5 = EZKnob(w, Rect(600, 200, 100, 100),
+	label: "Snare Delay Wet", controlSpec: spec3, action: {~sdelay.set(\wet, slider5.value)}, initVal: 0);
 
 
 
