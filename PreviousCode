@@ -210,7 +210,7 @@ xy.action={~playing.set(
 w.front;
 w.onClose = {~playing.free};
 )*/
-
+-------------------------------------------------------------------------------------------------
 // EZSlider Example
 
 /*p = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/thunder.wav");
