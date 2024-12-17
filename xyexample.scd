@@ -8,11 +8,14 @@ e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
 
 
 
-SynthDef(\multisample, { arg bassvol = 1, rate = 1;
+SynthDef(\multisample, { arg bassvol = 1,snarevol = 1, rate = 1;
 	var bass = PlayBuf.ar(1, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;
+	var snare = PlayBuf.ar(1, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol !2;
 
 	Out.ar(0, bass*0.5);
 	Out.ar(~fx, bass*0.5);
+	Out.ar(0, snare*0.5);
+	Out.ar(~fx, snare*0.5);
 
 }).add;
 
