@@ -1,5 +1,6 @@
 (
 ~bfx = Bus.audio;
+~sfx = Bus.audio;
 
 b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bass.wav");
 c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/cymbals.wav");
@@ -10,12 +11,12 @@ e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
 
 SynthDef(\multisample, { arg bassvol = 1,snarevol = 1, rate = 1;
 	var bass = PlayBuf.ar(1, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;
-	var snare = PlayBuf.ar(1, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol !2;
+	var snare = PlayBuf.ar(1, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol;
 
 	Out.ar(0, bass*0.5);
 	Out.ar(~bfx, bass*0.5);
 	Out.ar(0, snare*0.5);
-	//Out.ar(~fx, snare*0.5);
+	Out.ar(~sfx, snare*0.5);
 
 }).add;
 
@@ -23,6 +24,15 @@ SynthDef(\delay, {
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
 	sound = In.ar(~bfx);
+	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+
+	Out.ar(0, delay);
+}).add;
+
+SynthDef(\sdelay, {
+	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
+	var sound, delay;
+	sound = In.ar(~sfx);
 	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
 
 	Out.ar(0, delay);
