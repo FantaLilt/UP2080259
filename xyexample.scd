@@ -75,7 +75,7 @@ SynthDef(\sdelay, {
 (
 //variables for all sliders
 var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5, slider6, slider7, slider8, slider9;
-w = Window("I am a window", Rect(800, 100, 800, 800));
+w = Window("2D Slider", Rect(800, 100, 800, 800));
 
 // pulls the synth delays
 ~sdelay = Synth(\sdelay);
