@@ -29,7 +29,8 @@ w.onClose = {~playing.free};
 ----------------------------------------------------------------------------------------------------
 //current work 17/12
 (
-~bassfx = Bus.audio;
+~bfx = Bus.audio;
+~sfx = Bus.audio;
 
 b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bass.wav");
 c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/cymbals.wav");
@@ -38,29 +39,42 @@ e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
 
 
 
-SynthDef(\multisample, { arg bassvol = 0, rate = 1;
+SynthDef(\multisample, { arg bassvol = 0, snarevol = 0, rate = 1;
 	var bass = PlayBuf.ar(1, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol;
-
+	var snare = PlayBuf.ar(1, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol;
 	Out.ar(0, bass*0.5);
-	Out.ar(~bassfx, bass*0.5);
+	Out.ar(~bfx, bass*0.5);
+	Out.ar(0, snare*0.5);
+	Out.ar(~sfx, snare*0.5);
 
 }).add;
 
-SynthDef(\bassdelay, {
+SynthDef(\delay, {
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
-	sound = In.ar(~bassfx);
+	sound = In.ar(~bfx);
 	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
 
 	Out.ar(0, delay);
 }).add
+
+SynthDef(\sdelay, {
+	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
+	var sound, delay;
+	sound = In.ar(~sfx);
+	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+
+	Out.ar(0, delay);
+}).add
+
 )
 
 (
-var w, xy, slider1, spec1, slider2, spec2, slider3, spec3;
+var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5;
 w = Window("I am a window", Rect(800, 500, 800, 400));
 
-~delay = Synth(\bassdelay);
+~sdelay = Synth(\sdelay);
+~delay = Synth(\delay);
 ~playing = Synth(\multisample);
 
 spec1 = ControlSpec(-1, 2, \lin, 0, 1);
@@ -71,11 +85,17 @@ spec3 = ControlSpec(0, 1, \lin, 0, 0);
 slider1 = EZSlider(w, Rect(400, 20, 300, 20),
 	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1);
 
-slider2 = EZKnob(w, Rect(400, 100, 150, 150),
-	label: "Bass Delay", controlSpec: spec2, action: {~bassdelay.set(\delaytime, slider2.value)}, initVal: 0.2);
+slider2 = EZKnob(w, Rect(400, 100, 100, 100),
+	label: "Bass Delay", controlSpec: spec2, action: {~delay.set(\delaytime, slider2.value)}, initVal: 0.2);
 
-slider3 = EZKnob(w, Rect(600, 100, 150, 150),
-	label: "Bass Delay Wet", controlSpec: spec3, action: {~bassdelay.set(\wet, slider3.value)}, initVal: 0);
+slider3 = EZKnob(w, Rect(600, 100, 100, 100),
+	label: "Bass Delay Wet", controlSpec: spec3, action: {~delay.set(\wet, slider3.value)}, initVal: 0);
+
+slider4 = EZKnob(w, Rect(400, 200, 100, 100),
+	label: "Snare Delay", controlSpec: spec2, action: {~sdelay.set(\delaytime, slider4.value)}, initVal: 0.2);
+
+slider5 = EZKnob(w, Rect(600, 200, 100, 100),
+	label: "Snare Delay Wet", controlSpec: spec3, action: {~sdelay.set(\wet, slider5.value)}, initVal: 0);
 
 
 
