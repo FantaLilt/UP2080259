@@ -1,28 +1,28 @@
 (
-~bfx = Bus.audio;
-~cfx = Bus.audio;
-~kfx = Bus.audio;
-~sfx = Bus.audio;
+~bfx = Bus.audio(s, 2);
+~cfx = Bus.audio(s, 2);
+~kfx = Bus.audio(s, 2);
+~sfx = Bus.audio(s, 2);
 
-b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/bass.wav");
-c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/cymbals.wav");
-d = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/kick.wav");
-e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "audio/snare.wav");
+b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/bass4.wav");
+c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/drums8.wav");
+d = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/gtr8.wav");
+e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/vox8.wav");
 
 
 
 SynthDef(\multisample, { arg bassvol = 1, cymbalsvol = 1, kickvol = 1, snarevol = 1, rate = 1;
-	var bass = PlayBuf.ar(1, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;
-	var cymbals = PlayBuf.ar(1, c.bufnum, BufRateScale.kr(c.bufnum)*rate, loop: 1)*cymbalsvol !2;
-	var kick = PlayBuf.ar(1, d.bufnum, BufRateScale.kr(d.bufnum)*rate, loop: 1)*kickvol !2;
-	var snare = PlayBuf.ar(1, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol !2;
+	var bass = PlayBuf.ar(2, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;
+	var cymbals = PlayBuf.ar(2, c.bufnum, BufRateScale.kr(c.bufnum)*rate, loop: 1)*cymbalsvol !2;
+	var kick = PlayBuf.ar(2, d.bufnum, BufRateScale.kr(d.bufnum)*rate, loop: 1)*kickvol !2;
+	var snare = PlayBuf.ar(2, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol !2;
 
-	Out.ar(0, bass*0.5);
-	Out.ar(~bfx, bass*0.5);
-	Out.ar(0, cymbals*0.5);
-	Out.ar(~cfx, cymbals*0.5);
-	Out.ar(0, kick*0.5);
-	Out.ar(~kfx, kick*0.5);
+	// Out.ar(0, bass*0.5);
+	// Out.ar(~bfx, bass*0.5);
+	// Out.ar(0, cymbals*0.5);
+	// Out.ar(~cfx, cymbals*0.5);
+	// Out.ar(0, kick*0.5);
+	// Out.ar(~kfx, kick*0.5);
 	Out.ar(0, snare*0.5);
 	Out.ar(~sfx, snare*0.5);
 
@@ -32,7 +32,7 @@ SynthDef(\bdelay, {
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
 	sound = In.ar(~bfx);
-	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+	delay = CombL.ar(sound, 1, Lag.kr(delaytime, lag), fb, wet);
 
 	Out.ar(0, delay);
 }).add;
@@ -41,7 +41,7 @@ SynthDef(\cdelay, {
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
 	sound = In.ar(~cfx);
-	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+	delay = CombL.ar(sound, 1, Lag.kr(delaytime, lag), fb, wet);
 
 	Out.ar(0, delay);
 }).add;
@@ -50,7 +50,7 @@ SynthDef(\kdelay, {
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
 	sound = In.ar(~kfx);
-	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+	delay = CombL.ar(sound, 1, Lag.kr(delaytime, lag), fb, wet);
 
 	Out.ar(0, delay);
 }).add;
@@ -59,7 +59,7 @@ SynthDef(\sdelay, {
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
 	sound = In.ar(~sfx);
-	delay = CombL.ar(sound, 2, Lag.kr(delaytime, lag), fb, wet);
+	delay = CombL.ar(sound, 1, Lag.kr(delaytime, lag), fb, wet);
 
 	Out.ar(0, delay);
 }).add;
