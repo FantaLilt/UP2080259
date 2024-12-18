@@ -11,20 +11,20 @@ e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/vox8.wav"
 
 
 
-SynthDef(\multisample, { arg bassvol = 1, cymbalsvol = 1, kickvol = 1, snarevol = 1, rate = 1;
+SynthDef(\multisample, { arg bassvol = 1, drumsvol = 1, gtrvol = 1, voxvol = 1, rate = 1;
 	var bass = PlayBuf.ar(2, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;
-	var cymbals = PlayBuf.ar(2, c.bufnum, BufRateScale.kr(c.bufnum)*rate, loop: 1)*cymbalsvol !2;
-	var kick = PlayBuf.ar(2, d.bufnum, BufRateScale.kr(d.bufnum)*rate, loop: 1)*kickvol !2;
-	var snare = PlayBuf.ar(2, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*snarevol !2;
+	var drums = PlayBuf.ar(2, c.bufnum, BufRateScale.kr(c.bufnum)*rate, loop: 1)*drumsvol !2;
+	var gtr = PlayBuf.ar(2, d.bufnum, BufRateScale.kr(d.bufnum)*rate, loop: 1)*gtrvol !2;
+	var vox = PlayBuf.ar(2, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*voxvol !2;
 
-	// Out.ar(0, bass*0.5);
-	// Out.ar(~bfx, bass*0.5);
-	// Out.ar(0, cymbals*0.5);
-	// Out.ar(~cfx, cymbals*0.5);
-	// Out.ar(0, kick*0.5);
-	// Out.ar(~kfx, kick*0.5);
-	Out.ar(0, snare*0.5);
-	Out.ar(~sfx, snare*0.5);
+	Out.ar(0, bass*0.5);
+	Out.ar(~bfx, bass*0.5);
+	Out.ar(0, drums*0.5);
+	Out.ar(~cfx, drums*0.5);
+	Out.ar(0, gtr*0.5);
+	Out.ar(~kfx, gtr*0.5);
+	Out.ar(0, vox*0.5);
+	Out.ar(~sfx, vox*0.5);
 
 }).add;
 
@@ -83,29 +83,29 @@ spec3 = ControlSpec(0, 1, \lin, 0, 0);
 slider1 = EZSlider(w, Rect(250, 50, 300, 20),
 	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1);
 
-slider2 = EZKnob(w, Rect(400, 100, 100, 100),
+slider2 = EZKnob(w, Rect(400, 100, 130, 100),
 	label: "Bass Delay", controlSpec: spec2, action: {~bdelay.set(\delaytime, slider2.value)}, initVal: 0.2);
 
-slider3 = EZKnob(w, Rect(600, 100, 100, 100),
+slider3 = EZKnob(w, Rect(600, 100, 130, 100),
 	label: "Bass Delay Wet", controlSpec: spec3, action: {~bdelay.set(\wet, slider3.value)}, initVal: 0);
 
-slider4 = EZKnob(w, Rect(400, 200, 100, 100),
-	label: "Cymbals Delay", controlSpec: spec2, action: {~cdelay.set(\delaytime, slider4.value)}, initVal: 0.2);
+slider4 = EZKnob(w, Rect(400, 200, 130, 100),
+	label: "Drums Delay", controlSpec: spec2, action: {~cdelay.set(\delaytime, slider4.value)}, initVal: 0.2);
 
-slider5 = EZKnob(w, Rect(600, 200, 100, 100),
-	label: "Cymbals Delay Wet", controlSpec: spec3, action: {~cdelay.set(\wet, slider5.value)}, initVal: 0);
+slider5 = EZKnob(w, Rect(600, 200, 130, 100),
+	label: "Drums Delay Wet", controlSpec: spec3, action: {~cdelay.set(\wet, slider5.value)}, initVal: 0);
 
-slider6 = EZKnob(w, Rect(400, 300, 100, 100),
-	label: "Kick Delay", controlSpec: spec2, action: {~kdelay.set(\delaytime, slider6.value)}, initVal: 0.2);
+slider6 = EZKnob(w, Rect(400, 300, 130, 100),
+	label: "Guitar Delay", controlSpec: spec2, action: {~kdelay.set(\delaytime, slider6.value)}, initVal: 0.2);
 
-slider7 = EZKnob(w, Rect(600, 300, 100, 100),
-	label: "Kick Delay Wet", controlSpec: spec3, action: {~kdelay.set(\wet, slider7.value)}, initVal: 0);
+slider7 = EZKnob(w, Rect(600, 300, 130, 100),
+	label: "Guitar Delay Wet", controlSpec: spec3, action: {~kdelay.set(\wet, slider7.value)}, initVal: 0);
 
-slider8 = EZKnob(w, Rect(400, 400, 100, 100),
-	label: "Snare Delay", controlSpec: spec2, action: {~sdelay.set(\delaytime, slider8.value)}, initVal: 0.2);
+slider8 = EZKnob(w, Rect(400, 400, 130, 100),
+	label: "Vocal Delay", controlSpec: spec2, action: {~sdelay.set(\delaytime, slider8.value)}, initVal: 0.2);
 
-slider9 = EZKnob(w, Rect(600, 400, 100, 100),
-	label: "Snare Delay Wet", controlSpec: spec3, action: {~sdelay.set(\wet, slider9.value)}, initVal: 0);
+slider9 = EZKnob(w, Rect(600, 400, 130, 100),
+	label: "Vocal Delay Wet", controlSpec: spec3, action: {~sdelay.set(\wet, slider9.value)}, initVal: 0);
 
 
 
@@ -113,10 +113,10 @@ xy = Slider2D(w, Rect(10, 100, 380, 380));
 xy.setXY(0.5, 0.5);
 
 xy.action={~playing.set(
-	\kickvol, xy.x,
-	\cymbalsvol, xy.x.linlin(0, 1, 1, 0),
+	\gtrvol, xy.x,
+	\drumsvol, xy.x.linlin(0, 1, 1, 0),
 	\bassvol, xy.y,
-	\snarevol, xy.y.linlin(0, 1, 1, 0),
+	\voxvol, xy.y.linlin(0, 1, 1, 0),
 
 
 )};
