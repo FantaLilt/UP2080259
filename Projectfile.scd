@@ -63,12 +63,17 @@ SynthDef(\sdelay, {
 
 	Out.ar(0, delay);
 }).add;
+
+SynthDef(\lowpassfilter, { arg freq = 220;
+	LPF.kr(\multisample,freq,1,0);
+}).add;
 )
 
 (
-var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5, slider6, slider7, slider8, slider9;
+var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5, slider6, slider7, slider8, slider9, slider10;
 w = Window("I am a window", Rect(800, 500, 800, 800));
 
+~lpf = Synth(\lowpassfilter);
 ~bdelay = Synth(\bdelay);
 ~cdelay = Synth(\cdelay);
 ~kdelay = Synth(\kdelay);
@@ -107,6 +112,8 @@ slider8 = EZKnob(w, Rect(400, 400, 130, 100),
 slider9 = EZKnob(w, Rect(600, 400, 130, 100),
 	label: "Vocal Delay Wet", controlSpec: spec3, action: {~sdelay.set(\wet, slider9.value)}, initVal: 0);
 
+slider10 = EZSlider(w, Rect(10, 50, 300, 20),
+	label: "LPF", controlSpec: spec1, action: {~lpf.set(\freq, slider10.value)}, initVal: 1);
 
 
 xy = Slider2D(w, Rect(10, 100, 380, 380));
@@ -124,6 +131,7 @@ xy.action={~playing.set(
 w.front;
 w.onClose = {~playing.free};
 )
+
 
 -------------------------------------------------------------------------------------------------------
 //current work 17/12 - delay breaks after everytime i add a new sound to it
