@@ -71,7 +71,7 @@ SynthDef(\lowpassfilter, { arg freq = 220;
 
 (
 var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5, slider6, slider7, slider8, slider9, slider10;
-w = Window("I am a window", Rect(800, 300, 800, 800));
+w = Window("I am a window", Rect(300, 70, 800, 600));
 
 ~lpf = Synth(\lowpassfilter);
 ~bdelay = Synth(\bdelay);//calling synth delay
