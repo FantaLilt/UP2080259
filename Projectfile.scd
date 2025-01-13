@@ -1,10 +1,10 @@
 (
-~bfx = Bus.audio(s, 2);
+~bfx = Bus.audio(s, 2);//Delay buses for each sample
 ~cfx = Bus.audio(s, 2);
 ~kfx = Bus.audio(s, 2);
 ~sfx = Bus.audio(s, 2);
 
-b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/bass4.wav");
+b = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/bass4.wav");//pulls all samples
 c = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/drums8.wav");
 d = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/gtr8.wav");
 e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/vox8.wav");
@@ -12,12 +12,12 @@ e = Buffer.read(s, thisProcess.nowExecutingPath.dirname +/+ "nin_audio/vox8.wav"
 
 
 SynthDef(\multisample, { arg bassvol = 1, drumsvol = 1, gtrvol = 1, voxvol = 1, rate = 1;
-	var bass = PlayBuf.ar(2, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;
+	var bass = PlayBuf.ar(2, b.bufnum, BufRateScale.kr(b.bufnum)*rate, loop: 1)*bassvol !2;// creates a variable with arguments containing the vol and rate of the sample
 	var drums = PlayBuf.ar(2, c.bufnum, BufRateScale.kr(c.bufnum)*rate, loop: 1)*drumsvol !2;
 	var gtr = PlayBuf.ar(2, d.bufnum, BufRateScale.kr(d.bufnum)*rate, loop: 1)*gtrvol !2;
 	var vox = PlayBuf.ar(2, e.bufnum, BufRateScale.kr(e.bufnum)*rate, loop: 1)*voxvol !2;
 
-	Out.ar(0, bass*0.5);
+	Out.ar(0, bass*0.5);// output of delay from bus and variable
 	Out.ar(~bfx, bass*0.5);
 	Out.ar(0, drums*0.5);
 	Out.ar(~cfx, drums*0.5);
@@ -28,7 +28,7 @@ SynthDef(\multisample, { arg bassvol = 1, drumsvol = 1, gtrvol = 1, voxvol = 1, 
 
 }).add;
 
-SynthDef(\bdelay, {
+SynthDef(\bdelay, {//delay function. calls delay bus
 	arg delaytime = 0.1, wet = 0, fb = 1, lag = 2;
 	var sound, delay;
 	sound = In.ar(~bfx);
@@ -71,28 +71,28 @@ SynthDef(\lowpassfilter, { arg freq = 220;
 
 (
 var w, xy, slider1, spec1, slider2, spec2, slider3, spec3, slider4, slider5, slider6, slider7, slider8, slider9, slider10;
-w = Window("I am a window", Rect(800, 500, 800, 800));
+w = Window("I am a window", Rect(800, 300, 800, 800));
 
 ~lpf = Synth(\lowpassfilter);
-~bdelay = Synth(\bdelay);
+~bdelay = Synth(\bdelay);//calling synth delay
 ~cdelay = Synth(\cdelay);
 ~kdelay = Synth(\kdelay);
 ~sdelay = Synth(\sdelay);
-~playing = Synth(\multisample);
+~playing = Synth(\multisample);// calling synth samples
 
-spec1 = ControlSpec(-1, 2, \lin, 0, 1);
-spec2 = ControlSpec(0.2, 1, \lin, 0, 0.5);
-spec3 = ControlSpec(0, 1, \lin, 0, 0);
+spec1 = ControlSpec(-1, 2, \lin, 0, 1);// control spec for rate
+spec2 = ControlSpec(0.2, 1, \lin, 0, 0.5);// control spec for delay
+spec3 = ControlSpec(0, 1, \lin, 0, 0);// control spec for delay wet
 
 
-slider1 = EZSlider(w, Rect(250, 50, 300, 20),
-	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1);
+slider1 = EZSlider(w, Rect(300, 50, 300, 20),
+	label: "Rate", controlSpec: spec1, action: {~playing.set(\rate, slider1.value)}, initVal: 1); // rate slider for all samples
 
 slider2 = EZKnob(w, Rect(400, 100, 130, 100),
-	label: "Bass Delay", controlSpec: spec2, action: {~bdelay.set(\delaytime, slider2.value)}, initVal: 0.2);
+	label: "Bass Delay", controlSpec: spec2, action: {~bdelay.set(\delaytime, slider2.value)}, initVal: 0.2); // EZknob for deley, calls delay synth
 
 slider3 = EZKnob(w, Rect(600, 100, 130, 100),
-	label: "Bass Delay Wet", controlSpec: spec3, action: {~bdelay.set(\wet, slider3.value)}, initVal: 0);
+	label: "Bass Delay Wet", controlSpec: spec3, action: {~bdelay.set(\wet, slider3.value)}, initVal: 0); // EZknob for delay wet
 
 slider4 = EZKnob(w, Rect(400, 200, 130, 100),
 	label: "Drums Delay", controlSpec: spec2, action: {~cdelay.set(\delaytime, slider4.value)}, initVal: 0.2);
@@ -116,20 +116,20 @@ slider10 = EZSlider(w, Rect(10, 50, 300, 20),
 	label: "LPF", controlSpec: spec1, action: {~lpf.set(\freq, slider10.value)}, initVal: 1);
 
 
-xy = Slider2D(w, Rect(10, 100, 380, 380));
+xy = Slider2D(w, Rect(10, 100, 380, 380));// creates a 2D slider
 xy.setXY(0.5, 0.5);
 
 xy.action={~playing.set(
-	\gtrvol, xy.x,
-	\drumsvol, xy.x.linlin(0, 1, 1, 0),
-	\bassvol, xy.y,
-	\voxvol, xy.y.linlin(0, 1, 1, 0),
+	\gtrvol, xy.x, // set to play on X
+	\drumsvol, xy.x.linlin(0, 1, 1, 0),// set to play on -X
+	\bassvol, xy.y, // set to play on Y
+	\voxvol, xy.y.linlin(0, 1, 1, 0), // set to play on -Y
 
 
 )};
 
 w.front;
-w.onClose = {~playing.free};
+w.onClose = {~playing.free};// stops music when closing window
 )
 
 
